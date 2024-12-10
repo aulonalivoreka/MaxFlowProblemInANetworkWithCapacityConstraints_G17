@@ -108,3 +108,24 @@ max_flow += path_flow
     return max_flow, residual_graph
 
 
+def main():
+    """
+    Main function to execute the Edmonds-Karp algorithm and visualize results.
+    """
+    # Create the graph
+    graph = create_graph()
+
+    # Define source and sink
+    source, sink = 'A', 'D'
+
+    # Run Edmonds-Karp algorithm
+    max_flow, residual_graph = edmonds_karp(graph, source, sink)
+
+    # Output results
+    print(f"Maximum Flow: {max_flow}")
+
+    # Visualize the graph and flow distribution
+    visualize_flow(graph, residual_graph)
+
+if _name_ == "_main_":
+    main()
