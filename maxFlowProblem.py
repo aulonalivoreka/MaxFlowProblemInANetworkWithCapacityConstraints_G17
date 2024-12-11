@@ -12,7 +12,6 @@ def create_graph():
         'D': {}
     }
     return graph
-
 def bfs(residual_graph, source, sink, parent):
     """
     Basic BFS implementation to find an augmenting path.
