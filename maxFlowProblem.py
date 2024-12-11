@@ -31,7 +31,8 @@ def bfs(residual_graph, source, sink, parent):
                 if neighbor == sink:
                     return True
     return False
-    import matplotlib.pyplot as plt
+
+import matplotlib.pyplot as plt
 import networkx as nx
 
 def visualize_flow(graph, residual_graph):
@@ -56,58 +57,6 @@ def visualize_flow(graph, residual_graph):
     plt.title("Flow Distribution (flow/capacity)")
     plt.show()
 
-def edmonds_karp(graph, source, sink):
-
-    """
-
-    Implements the Edmonds-Karp algorithm to compute the maximum flow.
-
-    Args:
-        graph: The input graph with capacities.
-        source: The source node.
-        sink: The sink node.
-    Returns:
-        max_flow: The maximum flow value.
-        residual_graph: The updated residual graph.
-
-    """
-
-    # Initialize residual graph
-
-    residual_graph = {u: {v: graph[u][v] for v in graph[u]} for u in graph}
-    for u in graph:
-        for v in graph[u]:
-            if v not in residual_graph:
-                residual_graph[v] = {}
-            residual_graph[v][u] = 0  # Reverse edge
-
-    max_flow = 0
-    parent = {}
-
-
-    # Find augmenting paths using BFS
-    while bfs(residual_graph, source, sink, parent):
-        # Find bottleneck capacity in the augmenting path
-        path_flow = float('Inf')
-        s = sink
-
-        while s != source:
-            path_flow = min(path_flow, residual_graph[parent[s]][s])
-            s = parent[s]
-
-        # Update residual capacities
-        v = sink
-        while v != source:
-            u = parent[v]
-            residual_graph[u][v] -= path_flow
-            residual_graph[v][u] += path_flow
-            v = parent[v]
-
-max_flow += path_flow
-
-    return max_flow, residual_graph
-
-
 def main():
     """
     Main function to execute the Edmonds-Karp algorithm and visualize results.
@@ -128,4 +77,4 @@ def main():
     visualize_flow(graph, residual_graph)
 
 if _name_ == "_main_":
-    main()
+    main()
