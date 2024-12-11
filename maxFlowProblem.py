@@ -12,9 +12,17 @@ def create_graph():
         'D': {}
     }
     return graph
+    
 def bfs(residual_graph, source, sink, parent):
     """
-    Basic BFS implementation to find an augmenting path.
+    Perform BFS to find an augmenting path in the residual graph.
+    Args:
+        residual_graph: The residual graph with capacities.
+        source: The source node.
+        sink: The sink node.
+        parent: Dictionary to store the path.
+    Returns:
+        True if an augmenting path exists, False otherwise.
     """
     visited = set()
     queue = deque([source])
