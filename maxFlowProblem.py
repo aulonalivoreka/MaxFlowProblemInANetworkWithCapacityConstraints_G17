@@ -43,26 +43,26 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 def visualize_flow(graph, residual_graph):
-    """
-    Visualizes the flow distribution in the graph.
-    Args:
-        graph: The original graph.
-        residual_graph: The residual graph with updated flows.
-    """
-    G = nx.DiGraph()
-    for u in graph:
-        for v, capacity in graph[u].items():
-            G.add_edge(u, v, capacity=capacity)
+"""
+Visualizes the flow distribution in the graph.
+Args:
+graph: The original graph.
+residual_graph: The residual graph with updated flows.
+"""
+G = nx.DiGraph()
+for u in graph:
+for v, capacity in graph[u].items():
+G.add_edge(u, v, capacity=capacity)
 
-    pos = nx.spring_layout(G)
-    nx.draw(G, pos, with_labels=True, node_size=700, node_color='lightblue')
-    edge_labels = {
-        (u, v): f"{graph[u][v] - residual_graph[u][v]}/{graph[u][v]}"
-        for u in graph for v in graph[u]
-    }
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
-    plt.title("Flow Distribution (flow/capacity)")
-    plt.show()
+pos = nx.spring_layout(G)
+nx.draw(G, pos, with_labels=True, node_size=700, node_color='lightblue')
+edge_labels = {
+(u, v): f"{graph[u][v] - residual_graph[u][v]}/{graph[u][v]}"
+for u in graph for v in graph[u]
+}
+nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
+plt.title("Flow Distribution (flow/capacity)")
+plt.show()
 
 def main():
     """
