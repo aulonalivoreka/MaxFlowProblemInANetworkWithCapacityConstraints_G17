@@ -25,31 +25,21 @@ graph = {
     'T': {}
 }
 
-def bfs(residual_graph, source, sink, parent):
-    """
-    Perform BFS to find an augmenting path in the residual graph.
-    Args:
-        residual_graph: The residual graph with capacities.
-        source: The source node.
-        sink: The sink node.
-        parent: Dictionary to store the path.
-    Returns:
-        True if an augmenting path exists, False otherwise.
-    """
-    visited = set()
-    queue = deque([source])
-    visited.add(source)
+def edmonds_karp(graph, source, sink):
+    parent = {}
+    max_flow = 0
+    residual_graph = {u: {} for u in graph}
+    
+    # Initialize residual graph with capacities
+    for u in graph:
+        for v, capacity in graph[u].items():
+            residual_graph[u][v] = capacity
+            residual_graph[v].setdefault(u, 0)
+    
+    while bfs_capacity(residual_graph, source, sink, parent):
+        path_flow = float('Inf')
+        s = sink
 
-    while queue:
-        current = queue.popleft()
-        for neighbor, capacity in residual_graph[current].items():
-            if neighbor not in visited and capacity > 0:
-                queue.append(neighbor)
-                visited.add(neighbor)
-                parent[neighbor] = current
-                if neighbor == sink:
-                    return True
-    return False
 
 def edmonds_karp(graph, source, sink):
     """
