@@ -77,74 +77,15 @@ def visualize_graph(graph, flow_graph):
     plt.show()
 
 
-    max_flow = 0
-    parent = {}
+    # Source and Sink
+source, sink = 'S', 'T'
 
-    # Find augmenting paths using BFS
-    while bfs(residual_graph, source, sink, parent):
-        # Find bottleneck capacity in the augmenting path
-        path_flow = float('Inf')
-        s = sink
-        while s != source:
-            path_flow = min(path_flow, residual_graph[parent[s]][s])
-            s = parent[s]
+# Run Edmonds-Karp Algorithm
+max_flow, flow_distribution = edmonds_karp(graph, source, sink)
 
-        # Update residual capacities
-        v = sink
-        while v != source:
-            u = parent[v]
-            residual_graph[u][v] -= path_flow
-            residual_graph[v][u] += path_flow
-            v = parent[v]
+# Output Results
+print(f"Maximum Flow: {max_flow}")
 
-        max_flow += path_flow
+# Visualize the Graph and Flow Distribution
+visualize_graph(graph, flow_distribution)
 
-    return max_flow, residual_graph
-
-
-import matplotlib.pyplot as plt
-import networkx as nx
-
-def visualize_flow(graph, residual_graph):
-"""
-Visualizes the flow distribution in the graph.
-Args:
-graph: The original graph.
-residual_graph: The residual graph with updated flows.
-"""
-G = nx.DiGraph()
-for u in graph:
-for v, capacity in graph[u].items():
-G.add_edge(u, v, capacity=capacity)
-
-pos = nx.spring_layout(G)
-nx.draw(G, pos, with_labels=True, node_size=700, node_color='lightblue')
-edge_labels = {
-(u, v): f"{graph[u][v] - residual_graph[u][v]}/{graph[u][v]}"
-for u in graph for v in graph[u]
-}
-nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
-plt.title("Flow Distribution (flow/capacity)")
-plt.show()
-
-def main():
-    """
-    Main function to execute the Edmonds-Karp algorithm and visualize results.
-    """
-    # Create the graph
-    graph = create_graph()
-
-    # Define source and sink
-    source, sink = 'A', 'D'
-
-    # Run Edmonds-Karp algorithm
-    max_flow, residual_graph = edmonds_karp(graph, source, sink)
-
-    # Output results
-    print(f"Maximum Flow: {max_flow}")
-
-    # Visualize the graph and flow distribution
-    visualize_flow(graph, residual_graph)
-
-if _name_ == "_main_":
-    main()
