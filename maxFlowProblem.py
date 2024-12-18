@@ -59,6 +59,23 @@ def edmonds_karp(graph, source, sink):
     return max_flow, residual_graph
 
 
+import networkx as nx
+import matplotlib.pyplot as plt
+
+def visualize_graph(graph, flow_graph):
+    G = nx.DiGraph()
+    for u in graph:
+        for v, capacity in graph[u].items():
+            G.add_edge(u, v, capacity=capacity, flow=flow_graph[u].get(v, 0))
+    
+    pos = nx.spring_layout(G)
+    edge_labels = {
+        (u, v): f"{d['flow']}/{d['capacity']}" for u, v, d in G.edges(data=True)
+    }
+    nx.draw(G, pos, with_labels=True, node_color="skyblue", node_size=1500, arrowsize=20)
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
+    plt.show()
+
 
     max_flow = 0
     parent = {}
