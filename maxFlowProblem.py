@@ -73,31 +73,35 @@ def EdmondKarp(self, source=0, sink=None):
             max_flow += path_flow
 
         return max_flow
+def edmonds_karp(self):
+        """
+        Calculate the maximum flow using the Edmonds-Karp algorithm.
+        :return: Maximum flow value.
+        """
+        parent = [-1] * self.size
+        max_flow = 0
 
-def visualize_graph(graph, flow_graph):
-    G = nx.DiGraph()
-    for u in graph:
-        for v, capacity in graph[u].items():
-            G.add_edge(u, v, capacity=capacity, flow=flow_graph[u].get(v, 0))
-    
-    pos = nx.spring_layout(G)
-    edge_labels = {
-        (u, v): f"{d['flow']}/{d['capacity']}" for u, v, d in G.edges(data=True)
-    }
-    nx.draw(G, pos, with_labels=True, node_color="skyblue", node_size=1500, arrowsize=20)
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
-    plt.show()
+        while self._bfs(parent):
+            # Find the bottleneck capacity in the path
+            path_flow = float('Inf')
+            current = self.sink
+
+            while current != self.source:
+                path_flow = min(path_flow, self.capacity[parent[current], current] - self.flow[parent[current], current])
+                current = parent[current]
+
+            # Update the residual capacities of the edges
+            current = self.sink
+            while current != self.source:
+                prev = parent[current]
+                self.flow[prev, current] += path_flow
+                self.flow[current, prev] -= path_flow
+                current = prev
+
+            max_flow += path_flow
+
+        return max_flow
 
 
-    # Source and Sink
-source, sink = 'S', 'T'
 
-# Run Edmonds-Karp Algorithm
-max_flow, flow_distribution = edmonds_karp(graph, source, sink)
-
-# Output Results
-print(f"Maximum Flow: {max_flow}")
-
-# Visualize the Graph and Flow Distribution
-visualize_graph(graph, flow_distribution)
 
