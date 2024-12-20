@@ -37,44 +37,42 @@ class Graph:
         return False
 
 
+def EdmondKarp(self, source=0, sink=None):
+        """
+        Implements the Edmonds-Karp algorithm to calculate the maximum flow.
+        Args:
+            source: The source node (default: 0).
+            sink: The sink node (default: last node).
+        Returns:
+            The value of the maximum flow.
+        """
+        if sink is None:
+            sink = self.size - 1  # Default sink is the last node
 
+        max_flow = 0
+        parent = [-1] * self.size
 
-def edmonds_karp(graph, source, sink):
-    parent = {}
-    max_flow = 0
-    residual_graph = {u: {} for u in graph}
-    
-    # Initialize residual graph with capacities
-    for u in graph:
-        for v, capacity in graph[u].items():
-            residual_graph[u][v] = capacity
-            residual_graph[v].setdefault(u, 0)
-    
-    while bfs_capacity(residual_graph, source, sink, parent):
-        path_flow = float('Inf')
-        s = sink
+        while self.bfs(source, sink, parent):
+            # Find the bottleneck capacity
+            path_flow = float('Inf')
+            current = sink
+            while current != source:
+                prev = parent[current]
+                path_flow = min(path_flow, self.capacity[prev][current] - self.flow[prev][current])
+                current = prev
 
+            # Update residual capacities in the flow graph
+            current = sink
+            while current != source:
+                prev = parent[current]
+                self.flow[prev][current] += path_flow
+                self.flow[current][prev] -= path_flow
+                current = prev
 
-       # Find the minimum capacity in the augmenting path
-        while s != source:
-            path_flow = min(path_flow, residual_graph[parent[s]][s])
-            s = parent[s]
-        
-        # Update residual capacities
-        v = sink
-        while v != source:
-            u = parent[v]
-            residual_graph[u][v] -= path_flow
-            residual_graph[v][u] += path_flow
-            v = parent[v]
-        
-        max_flow += path_flow
-    
-    return max_flow, residual_graph
+            # Add path flow to the overall maximum flow
+            max_flow += path_flow
 
-
-import networkx as nx
-import matplotlib.pyplot as plt
+        return max_flow
 
 def visualize_graph(graph, flow_graph):
     G = nx.DiGraph()
