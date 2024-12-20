@@ -1,41 +1,39 @@
 import numpy as np
+import networkx as nx
+import matplotlib.pyplot as plt
+
 
 class Graph:
-    def __init__(self, data):
-        """
-        Initialize the graph with an adjacency matrix of capacities.
-        Args:
-            data: 2D numpy array representing the capacity matrix.
-        """
-        self.capacity = data  # Capacity matrix
-        self.size = data.shape[0]  # Number of nodes
-        self.flow = np.zeros_like(data)  # Initialize flow matrix with zeros
+    def __init__(self, capacity_matrix):
+        self.capacity = capacity_matrix
+        self.size = len(capacity_matrix)
+        self.flow = np.zeros_like(capacity_matrix)
+        self.source = 0
+        self.sink = self.size - 1
 
-    def bfs(self, source, sink, parent):
-        """
-        Perform a BFS to find an augmenting path in the residual graph.
-        Args:
-            source: The source node.
-            sink: The sink node.
-            parent: List to store the path.
-        Returns:
-            True if an augmenting path exists, False otherwise.
-        """
+
+    def _bfs(self, parent):
         visited = [False] * self.size
-        queue = [source]
-        visited[source] = True
- while queue:
+        queue = [self.source]
+        visited[self.source] = True
+
+
+        while queue:
             current = queue.pop(0)
+
+
             for neighbor in range(self.size):
-                # If not visited and residual capacity exists
-                if not visited[neighbor] and (self.capacity[current][neighbor] - self.flow[current][neighbor] > 0):
+                if not visited[neighbor] and self.capacity[current, neighbor] - self.flow[current, neighbor] > 0:
                     queue.append(neighbor)
                     visited[neighbor] = True
                     parent[neighbor] = current
-                    if neighbor == sink:
-                        return True
-        return False
 
+
+                    if neighbor == self.sink:
+                        return True
+
+
+        return False
 
 def EdmondKarp(self, source=0, sink=None):
         """
