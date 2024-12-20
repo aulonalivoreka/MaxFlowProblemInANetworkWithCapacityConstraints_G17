@@ -222,5 +222,11 @@ if __name__ == "__main__":
      else:
         # Get graph input from the user
         capacity_matrix = get_user_input()
+          # Initialize and solve the graph
+     graph = Graph(capacity_matrix)
+     max_flow = graph.edmonds_karp()
+     print(f"Maximum Flow: {max_flow}")
 
 
+    # Visualize the flow distribution
+     graph.visualize_flow()
