@@ -34,6 +34,9 @@ The **Edmonds-Karp algorithm** uses a BFS (Breadth-First Search) to find, in eac
 - Labels edges with capacities and flows.
 - Curved edges are used for bidirectional flows.
 
+![image](https://github.com/user-attachments/assets/6c8762e2-6c89-458c-969c-c9af3fe923eb)
+
+
 ### User Interaction
 - Allows users to define custom graphs interactively.
 - Provides a default graph for quick testing.
