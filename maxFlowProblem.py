@@ -207,5 +207,20 @@ def get_user_input():
 
 
     return capacity_matrix
+if __name__ == "__main__":
+     choice = input("Use default graph (yes/no)? ").lower()
+     if choice == "yes":
+        # Default hardcoded graph
+        capacity_matrix = np.array([
+            [0, 16, 13, 0, 0, 0],
+            [0, 0, 10, 12, 0, 0],
+            [0, 4, 0, 0, 14, 0],
+            [0, 0, 9, 0, 0, 20],
+            [0, 0, 0, 7, 0, 4],
+            [0, 0, 0, 0, 0, 0]
+        ])
+     else:
+        # Get graph input from the user
+        capacity_matrix = get_user_input()
 
 
