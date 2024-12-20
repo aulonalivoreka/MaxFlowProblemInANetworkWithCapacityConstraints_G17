@@ -102,5 +102,110 @@ def EdmondKarp(self, source=0, sink=None):
 # Visualize the flow network
 visualize_flow(graph, capacity_matrix)
 
+  def visualize_flow(self):
+        G = nx.DiGraph()
+        for u in range(self.size):
+            for v in range(self.size):
+                if self.capacity[u, v] > 0:
+                    G.add_edge(u, v, capacity=self.capacity[u, v], flow=self.flow[u, v])
+
+
+        # Custom positions for better layout
+        #pos = nx.spring_layout(G)  # Gjeneron pozicione automatikisht për çdo nyje
+        pos = {
+            0: (-2, 0), 1: (-1, 1), 2: (-1, -1), 3: (0, 1), 4: (0, -1), 5: (1, 0)
+        }
+
+
+        # Highlight source and sink nodes with different colors
+        node_colors = ["green" if node == self.source else "red" if node == self.sink else "lightblue" for node in G.nodes()]
+
+
+        # Edge labels with capacity for all edges
+        edge_labels = {}
+        for u, v, d in G.edges(data=True):
+            edge_labels[(u, v)] = f"{d['capacity']}"
+
+
+        # Draw straight and curved edges selectively
+        curved_edges = []
+        straight_edges = []
+        for u, v in G.edges():
+            if G.has_edge(v, u) and (v, u) not in curved_edges:
+                curved_edges.append((u, v))
+            else:
+                straight_edges.append((u, v))
+
+
+        nx.draw_networkx_nodes(G, pos, node_color=node_colors, node_size=700)
+        nx.draw_networkx_labels(G, pos, font_weight='bold', font_size=10)
+
+
+        nx.draw_networkx_edges(G, pos, edgelist=straight_edges, connectionstyle="arc3,rad=0", arrows=True, arrowstyle='-|>', min_target_margin=15)
+        nx.draw_networkx_edges(G, pos, edgelist=curved_edges, connectionstyle="arc3,rad=0.2", arrows=True, arrowstyle='-|>', min_target_margin=15)
+
+
+        # Ensure all edge labels, including curved edges, are displayed clearly
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=10, label_pos=0.5, rotate=False)
+
+
+        # Explicitly label bidirectional edges to ensure both capacities are shown
+        for (u, v) in curved_edges:
+            if (v, u) in G.edges:
+                plt.text(
+                    (pos[u][0] + pos[v][0]) / 2 - 0.2,
+                    (pos[u][1] + pos[v][1]) / 2 + 0.2,
+                    f"{G[u][v]['capacity']}/{G[v][u]['capacity']}",
+                    fontsize=10, color="black"
+                )
+
+
+        plt.box(False)  # Remove the black border box
+        plt.show()
+
+
+def get_user_input():
+    nodes = int(input("Enter the number of nodes in the graph: "))
+    capacity_matrix = np.zeros((nodes, nodes), dtype=int)
+
+
+    print("Enter the edges in the format 'source destination capacity' (0-indexed).")
+    print("Type 'done' when finished.")
+
+
+    max_edges = nodes * (nodes - 1)  # Maximum allowed edges
+    edge_count = 0
+
+
+    while edge_count < max_edges:
+        user_input = input(f"Edge ({edge_count + 1}/{max_edges}): ")
+        if user_input.lower() == "done":
+            break
+
+
+        try:
+            u, v, capacity = map(int, user_input.split())
+            if u == v:
+                print("Self-loops (edges from a vertex to itself) are not allowed. Try again.")
+                continue
+            if u < 0 or v < 0 or u >= nodes or v >= nodes or capacity < 0:
+                print("Invalid edge or capacity. Please try again.")
+                continue
+            if capacity_matrix[u, v] > 0:
+                print("Edge already exists. Duplicates are not allowed. Try again.")
+                continue
+
+
+            capacity_matrix[u, v] = capacity  # Add edge
+            edge_count += 1
+        except ValueError:
+            print("Invalid input format. Please enter: 'source destination capacity'.")
+
+
+    if edge_count == max_edges:
+        print("Maximum number of edges reached.")
+
+
+    return capacity_matrix
 
 
