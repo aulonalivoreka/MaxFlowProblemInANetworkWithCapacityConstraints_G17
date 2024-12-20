@@ -102,6 +102,25 @@ def edmonds_karp(self):
 
         return max_flow
 
+# Example graph: adjacency matrix with capacities
+capacity_matrix = np.array([
+    [0, 16, 13, 0, 0, 0],
+    [0, 0, 10, 12, 0, 0],
+    [0, 4, 0, 0, 14, 0],
+    [0, 0, 9, 0, 0, 20],
+    [0, 0, 0, 7, 0, 4],
+    [0, 0, 0, 0, 0, 0]
+])
+
+# Initialize the graph
+graph = Graph(data=capacity_matrix)
+
+# Compute maximum flow using Edmonds-Karp
+max_flow = graph.EdmondKarp()
+print(f"Maximum Flow: {max_flow}")
+
+# Visualize the flow network
+visualize_flow(graph, capacity_matrix)
 
 
 
