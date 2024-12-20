@@ -64,6 +64,7 @@ Run the following commands to clone the repository and navigate to its directory
 Execute the following command to start the script:
 
 
+
 ## Step 3: Select Graph Input Method
 When prompted, choose one of the following options:
 - **Default Graph**: Use a predefined graph provided in the script.
@@ -73,13 +74,15 @@ When prompted, choose one of the following options:
 
 #### Default Graph
 If you choose the default graph, the script will use the following capacity matrix:
-[0, 16, 13, 0, 0, 0],
-[0, 0, 10, 12, 0, 0],
-[0, 4, 0, 0, 14, 0],
-[0, 0, 9, 0, 0, 20],
-[0, 0, 0, 7, 0, 4],
-[0, 0, 0, 0, 0, 0]
 
+```plaintext
+[0, 16, 13,  0,  0,  0],
+[0,  0, 10, 12,  0,  0],
+[0,  4,  0,  0, 14,  0],
+[0,  0,  9,  0,  0, 20],
+[0,  0,  0,  7,  0,  4],
+[0,  0,  0,  0,  0,  0]
+```
 
 #### Custom Graph
 If you choose to provide custom input:
@@ -87,17 +90,16 @@ If you choose to provide custom input:
 2. Define the edges in the format: `source destination capacity`.
 3. Use `done` to finish adding edges.
 
-#### Example:
-Enter the number of nodes in the graph: 4 Enter the edges in the format 'source destination capacity' (0-indexed). Type 'done' when finished. 
-Edge (1/12): 0 1 10 
-Edge (2/12): 0 2 5 
-Edge (3/12): 1 3 10 
-Edge (4/12): 2 3 5 
+```plaintext
+Enter the number of nodes in the graph: 4
+Enter the edges in the format 'source destination capacity' (0-indexed).
+Type 'done' when finished.
+Edge (1/12): 0 1 10
+Edge (2/12): 0 2 5
+Edge (3/12): 1 3 10
+Edge (4/12): 2 3 5
 Edge (5/12): done
-
-shell
-Copy code
-
+```
 
 ### Output
 
