@@ -1,104 +1,166 @@
 import numpy as np
+import networkx as nx
+import matplotlib.pyplot as plt
 
 class Graph:
-    def __init__(self, data):
-        """
-        Initialize the graph with an adjacency matrix of capacities.
-        Args:
-            data: 2D numpy array representing the capacity matrix.
-        """
-        self.capacity = data  # Capacity matrix
-        self.size = data.shape[0]  # Number of nodes
-        self.flow = np.zeros_like(data)  # Initialize flow matrix with zeros
+    def __init__(self, capacity_matrix):
+        self.capacity = capacity_matrix
+        self.size = len(capacity_matrix)
+        self.flow = np.zeros_like(capacity_matrix)
+        self.source = 0
+        self.sink = self.size - 1
 
-    def bfs(self, source, sink, parent):
-        """
-        Perform a BFS to find an augmenting path in the residual graph.
-        Args:
-            source: The source node.
-            sink: The sink node.
-            parent: List to store the path.
-        Returns:
-            True if an augmenting path exists, False otherwise.
-        """
+    def _bfs(self, parent):
         visited = [False] * self.size
-        queue = [source]
-        visited[source] = True
- while queue:
+        queue = [self.source]
+        visited[self.source] = True
+
+        while queue:
             current = queue.pop(0)
+
             for neighbor in range(self.size):
                 if not visited[neighbor] and self.capacity[current, neighbor] - self.flow[current, neighbor] > 0:
                     queue.append(neighbor)
                     visited[neighbor] = True
                     parent[neighbor] = current
-                    if neighbor == sink:
+
+                    if neighbor == self.sink:
                         return True
+
         return False
 
+    def edmonds_karp(self):
+        parent = [-1] * self.size
+        max_flow = 0
 
+        while self._bfs(parent):
+            path_flow = float('Inf')
+            current = self.sink
 
+            while current != self.source:
+                path_flow = min(path_flow, self.capacity[parent[current], current] - self.flow[parent[current], current])
+                current = parent[current]
 
-def edmonds_karp(graph, source, sink):
-    parent = {}
-    max_flow = 0
-    residual_graph = {u: {} for u in graph}
-    
-    # Initialize residual graph with capacities
-    for u in graph:
-        for v, capacity in graph[u].items():
-            residual_graph[u][v] = capacity
-            residual_graph[v].setdefault(u, 0)
-    
-    while bfs_capacity(residual_graph, source, sink, parent):
-        path_flow = float('Inf')
-        s = sink
+            current = self.sink
+            while current != self.source:
+                prev = parent[current]
+                self.flow[prev, current] += path_flow
+                self.flow[current, prev] -= path_flow
+                current = prev
 
+            max_flow += path_flow
 
-       # Find the minimum capacity in the augmenting path
-        while s != source:
-            path_flow = min(path_flow, residual_graph[parent[s]][s])
-            s = parent[s]
-        
-        # Update residual capacities
-        v = sink
-        while v != source:
-            u = parent[v]
-            residual_graph[u][v] -= path_flow
-            residual_graph[v][u] += path_flow
-            v = parent[v]
-        
-        max_flow += path_flow
-    
-    return max_flow, residual_graph
+        return max_flow
 
+    def visualize_flow(self):
+        G = nx.DiGraph()
+        for u in range(self.size):
+            for v in range(self.size):
+                if self.capacity[u, v] > 0:
+                    G.add_edge(u, v, capacity=self.capacity[u, v], flow=self.flow[u, v])
 
-import networkx as nx
-import matplotlib.pyplot as plt
+        # Custom positions for better layout
+        #pos = nx.spring_layout(G)  # Gjeneron pozicione automatikisht për çdo nyje
+        pos = {
+            0: (-2, 0), 1: (-1, 1), 2: (-1, -1), 3: (0, 1), 4: (0, -1), 5: (1, 0)
+        }
 
-def visualize_graph(graph, flow_graph):
-    G = nx.DiGraph()
-    for u in graph:
-        for v, capacity in graph[u].items():
-            G.add_edge(u, v, capacity=capacity, flow=flow_graph[u].get(v, 0))
-    
-    pos = nx.spring_layout(G)
-    edge_labels = {
-        (u, v): f"{d['flow']}/{d['capacity']}" for u, v, d in G.edges(data=True)
-    }
-    nx.draw(G, pos, with_labels=True, node_color="skyblue", node_size=1500, arrowsize=20)
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
-    plt.show()
+        # Highlight source and sink nodes with different colors
+        node_colors = ["green" if node == self.source else "red" if node == self.sink else "lightblue" for node in G.nodes()]
 
+        # Edge labels with capacity for all edges
+        edge_labels = {}
+        for u, v, d in G.edges(data=True):
+            edge_labels[(u, v)] = f"{d['capacity']}"
 
-    # Source and Sink
-source, sink = 'S', 'T'
+        # Draw straight and curved edges selectively
+        curved_edges = []
+        straight_edges = []
+        for u, v in G.edges():
+            if G.has_edge(v, u) and (v, u) not in curved_edges:
+                curved_edges.append((u, v))
+            else:
+                straight_edges.append((u, v))
 
-# Run Edmonds-Karp Algorithm
-max_flow, flow_distribution = edmonds_karp(graph, source, sink)
+        nx.draw_networkx_nodes(G, pos, node_color=node_colors, node_size=700)
+        nx.draw_networkx_labels(G, pos, font_weight='bold', font_size=10)
 
-# Output Results
-print(f"Maximum Flow: {max_flow}")
+        nx.draw_networkx_edges(G, pos, edgelist=straight_edges, connectionstyle="arc3,rad=0", arrows=True, arrowstyle='-|>', min_target_margin=15)
+        nx.draw_networkx_edges(G, pos, edgelist=curved_edges, connectionstyle="arc3,rad=0.2", arrows=True, arrowstyle='-|>', min_target_margin=15)
 
-# Visualize the Graph and Flow Distribution
-visualize_graph(graph, flow_distribution)
+        # Ensure all edge labels, including curved edges, are displayed clearly
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=10, label_pos=0.5, rotate=False)
 
+        # Explicitly label bidirectional edges to ensure both capacities are shown
+        for (u, v) in curved_edges:
+            if (v, u) in G.edges:
+                plt.text(
+                    (pos[u][0] + pos[v][0]) / 2 - 0.2, 
+                    (pos[u][1] + pos[v][1]) / 2 + 0.2,
+                    f"{G[u][v]['capacity']}/{G[v][u]['capacity']}",
+                    fontsize=10, color="black"
+                )
+
+        plt.box(False)  # Remove the black border box
+        plt.show()
+
+def get_user_input():
+    nodes = int(input("Enter the number of nodes in the graph: "))
+    capacity_matrix = np.zeros((nodes, nodes), dtype=int)
+
+    print("Enter the edges in the format 'source destination capacity' (0-indexed).")
+    print("Type 'done' when finished.")
+
+    max_edges = nodes * (nodes - 1)  # Maximum allowed edges
+    edge_count = 0
+
+    while edge_count < max_edges:
+        user_input = input(f"Edge ({edge_count + 1}/{max_edges}): ")
+        if user_input.lower() == "done":
+            break
+
+        try:
+            u, v, capacity = map(int, user_input.split())
+            if u == v:
+                print("Self-loops (edges from a vertex to itself) are not allowed. Try again.")
+                continue
+            if u < 0 or v < 0 or u >= nodes or v >= nodes or capacity < 0:
+                print("Invalid edge or capacity. Please try again.")
+                continue
+            if capacity_matrix[u, v] > 0:
+                print("Edge already exists. Duplicates are not allowed. Try again.")
+                continue
+
+            capacity_matrix[u, v] = capacity  # Add edge
+            edge_count += 1
+        except ValueError:
+            print("Invalid input format. Please enter: 'source destination capacity'.")
+
+    if edge_count == max_edges:
+        print("Maximum number of edges reached.")
+
+    return capacity_matrix
+
+if __name__ == "__main__":
+     choice = input("Use default graph (yes/no)? ").lower()
+     if choice == "yes":
+        # Default hardcoded graph
+        capacity_matrix = np.array([
+            [0, 16, 13, 0, 0, 0],
+            [0, 0, 10, 12, 0, 0],
+            [0, 4, 0, 0, 14, 0],
+            [0, 0, 9, 0, 0, 20],
+            [0, 0, 0, 7, 0, 4],
+            [0, 0, 0, 0, 0, 0]
+        ])
+     else:
+        # Get graph input from the user
+        capacity_matrix = get_user_input()
+
+    # Initialize and solve the graph
+     graph = Graph(capacity_matrix)
+     max_flow = graph.edmonds_karp()
+     print(f"Maximum Flow: {max_flow}")
+
+    # Visualize the flow distribution
+     graph.visualize_flow()
