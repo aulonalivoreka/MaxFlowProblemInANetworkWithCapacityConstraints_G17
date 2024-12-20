@@ -2,37 +2,46 @@
 
 This project implements the **Edmonds-Karp algorithm**, a specific implementation of the Ford-Fulkerson method, to solve the **Maximum Flow Problem** in a directed network. The program is written in Python and includes functionality for graph visualization to display the flow distribution.
 
-Edmonds-Karp
-This algorithm uses a BFS to fins in each iteration the shortest augmenting path between the source and the sink. In each iteration, the bounding capacity is calculated, and a suitable amount of flow is being sent back along the augmented path. Doing so until the residual network is exhausted.The max flow is calculated by adding each iteration path flow.
+---
 
-Each path contains at least one edge. A single BFS runs O(E), and push along the path is in its worst case O(E). Since the length of the paths never decreases (as promised by the use of BFS) and the length of a path can never exceed V, each edge can be found V times. Leading to an overall worse case running O(VE^2).
+## Edmonds-Karp Algorithm
+
+The **Edmonds-Karp algorithm** uses a BFS (Breadth-First Search) to find, in each iteration, the shortest augmenting path between the source and the sink. The algorithm works as follows:
+1. In each iteration, the **bottleneck capacity** of the path is calculated.
+2. A suitable amount of flow is sent along the augmenting path.
+3. The process is repeated until no augmenting path exists in the residual network.
+
+### Key Characteristics:
+- Each path contains at least one edge.
+- A single BFS runs in **O(E)**, where **E** is the number of edges.
+- Each edge can be part of an augmenting path at most **V** times, where **V** is the number of vertices.
+- The overall worst-case running time is **O(VE²)**.
+
 ---
 
 ## Features
 
 ### Algorithm
-- Implements the **Edmonds-Karp algorithm**, using **Breadth-First Search (BFS)** to find augmenting paths.
-- Calculates the maximum possible flow from a source to a sink in a directed graph.
+- Implements the **Edmonds-Karp algorithm** to calculate the maximum flow.
+- Uses **BFS** to find the shortest augmenting paths.
 
 ### Graph Visualization
-- Uses **NetworkX** and **Matplotlib** to display the flow network.
+- Displays the flow network using **NetworkX** and **Matplotlib**.
 - Highlights:
   - Source node in green.
   - Sink node in red.
   - Intermediate nodes in light blue.
-- Displays:
-  - Edge capacities.
-  - Flow values for each edge.
-  - Curved edges for bidirectional links for clarity.
+- Labels edges with capacities and flows.
+- Curved edges are used for bidirectional flows.
 
 ### User Interaction
 - Allows users to define custom graphs interactively.
 - Provides a default graph for quick testing.
-- Validates user input for correct graph structure.
+- Validates user input for graph structure correctness.
 
 ---
 
-## Requirements
+## Prerequisites
 
 - Python 3.9+
 - Required libraries:
