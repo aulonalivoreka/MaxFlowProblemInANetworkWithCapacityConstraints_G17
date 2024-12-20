@@ -24,6 +24,17 @@ class Graph:
         visited = [False] * self.size
         queue = [source]
         visited[source] = True
+ while queue:
+            current = queue.pop(0)
+            for neighbor in range(self.size):
+                # If not visited and residual capacity exists
+                if not visited[neighbor] and (self.capacity[current][neighbor] - self.flow[current][neighbor] > 0):
+                    queue.append(neighbor)
+                    visited[neighbor] = True
+                    parent[neighbor] = current
+                    if neighbor == sink:
+                        return True
+        return False
 
 
 
