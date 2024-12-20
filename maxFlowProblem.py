@@ -1,29 +1,32 @@
-from collections import deque
+import numpy as np
 
-def bfs_capacity(graph, source, sink, parent):
-    visited = set()
-    queue = deque([source])
-    visited.add(source)
-    while queue:
-        node = queue.popleft()
-        for neighbor, capacity in graph[node].items():
-            if neighbor not in visited and capacity > 0:
-                queue.append(neighbor)
-                visited.add(neighbor)
-                parent[neighbor] = node
-                if neighbor == sink:
-                    return True
-    return False
+class Graph:
+    def __init__(self, data):
+        """
+        Initialize the graph with an adjacency matrix of capacities.
+        Args:
+            data: 2D numpy array representing the capacity matrix.
+        """
+        self.capacity = data  # Capacity matrix
+        self.size = data.shape[0]  # Number of nodes
+        self.flow = np.zeros_like(data)  # Initialize flow matrix with zeros
 
-# Example Graph Input
-graph = {
-    'S': {'A': 16, 'C': 13},
-    'A': {'B': 12},
-    'B': {'S': 4, 'T': 20},
-    'C': {'A': 10, 'D': 14},
-    'D': {'B': 7, 'T': 4},
-    'T': {}
-}
+    def bfs(self, source, sink, parent):
+        """
+        Perform a BFS to find an augmenting path in the residual graph.
+        Args:
+            source: The source node.
+            sink: The sink node.
+            parent: List to store the path.
+        Returns:
+            True if an augmenting path exists, False otherwise.
+        """
+        visited = [False] * self.size
+        queue = [source]
+        visited[source] = True
+
+
+
 
 def edmonds_karp(graph, source, sink):
     parent = {}
