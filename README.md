@@ -57,7 +57,6 @@ Install dependencies:
 pip install numpy networkx matplotlib
 
 ### How to Run
-
 ## Step 1: Clone the Repository
 Run the following commands to clone the repository and navigate to its directory:
 ```bash
