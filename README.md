@@ -55,3 +55,64 @@ The **Edmonds-Karp algorithm** uses a BFS (Breadth-First Search) to find, in eac
 Install dependencies:
 ```bash
 pip install numpy networkx matplotlib
+
+### How to Run
+
+## Step 1: Clone the Repository
+Run the following commands to clone the repository and navigate to its directory:
+```bash
+git clone <repository_url>
+cd <repository_directory>
+Step 2: Run the Script
+Execute the following command to start the script:
+
+bash
+Copy code
+python max_flow.py
+Step 3: Select Graph Input Method
+When prompted, choose one of the following options:
+
+Default Graph: Use a predefined graph provided in the script.
+Custom Input: Enter the number of nodes and edges interactively.
+Input Format
+Default Graph
+If you choose the default graph, the script will use the following capacity matrix:
+
+plaintext
+Copy code
+[0, 16, 13,  0,  0,  0],
+[0,  0, 10, 12,  0,  0],
+[0,  4,  0,  0, 14,  0],
+[0,  0,  9,  0,  0, 20],
+[0,  0,  0,  7,  0,  4],
+[0,  0,  0,  0,  0,  0]
+Custom Graph
+If you choose to provide custom input:
+
+Enter the number of nodes in the graph.
+Define the edges in the format: source destination capacity.
+Use done to finish adding edges.
+Example:
+plaintext
+Copy code
+Enter the number of nodes in the graph: 4
+Enter the edges in the format 'source destination capacity' (0-indexed).
+Type 'done' when finished.
+Edge (1/12): 0 1 10
+Edge (2/12): 0 2 5
+Edge (3/12): 1 3 10
+Edge (4/12): 2 3 5
+Edge (5/12): done
+Output
+Example Output for Maximum Flow
+After running the script, you will see the following example output:
+
+plaintext
+Copy code
+Maximum Flow: 23
+Graph Visualization
+The output includes a visualization of the graph:
+
+Nodes are color-coded to distinguish the source, sink, and intermediate nodes.
+Edges are labeled with their capacity and flow values.
+Curved edges are used to represent bidirectional flows, if applicable.
