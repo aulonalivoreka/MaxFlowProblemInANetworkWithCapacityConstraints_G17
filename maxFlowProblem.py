@@ -71,7 +71,8 @@ class Graph:
         # Edge labels with capacity for all edges
         edge_labels = {}
         for u, v, d in G.edges(data=True):
-            edge_labels[(u, v)] = f"{d['capacity']}"
+         edge_labels[(u, v)] = f"{int(d['flow'])}/{int(d['capacity'])}"
+
 
         # Draw straight and curved edges selectively
         curved_edges = []
@@ -97,7 +98,7 @@ class Graph:
                 plt.text(
                     (pos[u][0] + pos[v][0]) / 2 - 0.2, 
                     (pos[u][1] + pos[v][1]) / 2 + 0.2,
-                    f"{G[u][v]['capacity']}/{G[v][u]['capacity']}",
+                    f"{G[u][v]['flow']}/{G[u][v]['capacity']}",
                     fontsize=10, color="black"
                 )
 
