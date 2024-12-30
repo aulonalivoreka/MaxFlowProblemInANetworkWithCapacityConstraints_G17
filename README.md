@@ -57,7 +57,9 @@ To install the dependencies, run:
 ### How to Run
 
 ## Step 1: Clone the Repository
-Run the following commands to clone the repository and navigate to its directory:
+git clone https://github.com/aulonalivoreka/MaxFlowProblemInANetworkWithCapacityConstraints_G17.git
+cd MaxFlowProblemInANetworkWithCapacityConstraints_G17
+
 
 
 ## Step 2: Run the Script
