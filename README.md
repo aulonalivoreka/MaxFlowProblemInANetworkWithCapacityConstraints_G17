@@ -52,6 +52,7 @@ The **Edmonds-Karp algorithm** uses a BFS (Breadth-First Search) to find, in eac
   - **Matplotlib**
 
 To install the dependencies, run:
+pip install numpy networkx matplotlib
 
 
 ### How to Run
