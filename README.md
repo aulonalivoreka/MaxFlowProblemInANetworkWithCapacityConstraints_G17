@@ -65,7 +65,7 @@ cd MaxFlowProblemInANetworkWithCapacityConstraints_G17
 
 ## Step 2: Run the Script
 Execute the following command to start the script:
-
+python maxFlowProblem.py
 
 
 ## Step 3: Select Graph Input Method
