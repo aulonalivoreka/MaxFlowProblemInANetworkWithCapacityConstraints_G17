@@ -52,21 +52,25 @@ The **Edmonds-Karp algorithm** uses a BFS (Breadth-First Search) to find, in eac
   - **Matplotlib**
 
 To install the dependencies, run:
+```plaintext
 pip install numpy networkx matplotlib
-
+```
 
 ### How to Run
 
 ## Step 1: Clone the Repository
+```plaintext
 git clone https://github.com/aulonalivoreka/MaxFlowProblemInANetworkWithCapacityConstraints_G17.git
 cd MaxFlowProblemInANetworkWithCapacityConstraints_G17
-
+```
 
 
 ## Step 2: Run the Script
 Execute the following command to start the script:
-python maxFlowProblem.py
 
+```plaintext
+python maxFlowProblem.py
+```
 
 ## Step 3: Select Graph Input Method
 When prompted, choose one of the following options:
